@@ -210,8 +210,10 @@ class MainWindow(QWidget):
     def set_screen(self,index):
         if index == 0:
             global global_sign_path
+            global global_private_path
             global global_private_key_verify
             global_sign_path = None
+            global_private_path = None
             global_private_key_verify = False
 
             self.lineedit_sign.clear()
@@ -324,7 +326,7 @@ class MainWindow(QWidget):
                     json.dump(data, file, indent=4)  # 将更新后的数据写入文件
                     file.truncate()  # 截断文件，删除多余内容
         else:
-            print("配置文件路径错误！")
+            QMessageBox.warning(self, "配置文件丢失", "配置文件路径错误！")
 
         self.lineedit_database.setText(os.path.basename(database_path))
 
@@ -695,9 +697,14 @@ class ModifyInformation(QWidget):
                 text = global_behavior.encode_password(global_private_path,text)
             res = global_behavior.modify_data(self.id_value,self.col,text)
             if res == True:
-                QMessageBox.information(self,"修改成功","数据修改成功！")
-                self.close_signal.emit()
-                self.exit_win()
+                res = global_behavior.update_signature(global_sign_path, global_private_path, global_database_path)
+
+                if res == True:
+                    QMessageBox.information(self,"修改成功","数据修改成功！")
+                    self.close_signal.emit()
+                    self.exit_win()
+                else:
+                    QMessageBox.warning(self, "签名失败",  "第" + self.id_value + "条数据已被删除，但签名失败！")
             else:
                 QMessageBox.warning(self, "修改失败", "数据修改失败！")
 
