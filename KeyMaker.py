@@ -151,7 +151,7 @@ class CryptoControl:
                 # 从文件中读取字节序列
                 signature = file.read()
         except FileNotFoundError:
-            print("文件不存在！")
+            return False
         return signature
 
     @staticmethod
@@ -167,6 +167,7 @@ class CryptoControl:
 
         # 要验证的数据
         data = bytes(origin_data.encode("utf-8"))
+        public_key = public_key.encode('utf-8')
         public_key = load_pem_public_key(public_key, backend=default_backend())
 
         # 验证数字签名

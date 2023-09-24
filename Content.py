@@ -22,14 +22,17 @@ class Behavior:
         :return: 验证结果
         """
         self.db.modify_database_path(DB_path)
-        pubkey = self.db.select_public_key()
-        if pubkey != False:
-            signature = CryptoControl.load_signature(sign_path)
-            data = self.db.select_verify_data()
-            res = CryptoControl.verify_signature(signature,data,pubkey)
+        try:
+            pubkey = self.db.select_public_key()
+            if pubkey != False:
+                signature = CryptoControl.load_signature(sign_path)
+                data = self.db.select_verify_data()
+                res = CryptoControl.verify_signature(signature,data,pubkey)
 
-            return res
-        else:
+                return res
+            else:
+                return False
+        except:
             return False
 
     def register(self,DB_name:str)->tuple:

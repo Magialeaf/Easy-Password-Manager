@@ -185,7 +185,7 @@ class MainWindow(QWidget):
         font.setBold(True)
         self.table_widget.horizontalHeader().setFont(font)
 
-        size = (45,90,120,120,200,200,50,50)
+        size = (45,90,120,120,190,190,50,50)
         for i in range(row):
             self.table_widget.horizontalHeader().resizeSection(i, size[i])
 
@@ -346,7 +346,6 @@ class MainWindow(QWidget):
             res = global_behavior.verify_load(database_path,sign_path)
         else:
             res = False
-
         # 公私钥验证逻辑
         if res == True:
             QMessageBox.information(self, "登录成功", "密码正确！")
@@ -698,13 +697,12 @@ class ModifyInformation(QWidget):
             res = global_behavior.modify_data(self.id_value,self.col,text)
             if res == True:
                 res = global_behavior.update_signature(global_sign_path, global_private_path, global_database_path)
-
                 if res == True:
                     QMessageBox.information(self,"修改成功","数据修改成功！")
                     self.close_signal.emit()
                     self.exit_win()
                 else:
-                    QMessageBox.warning(self, "签名失败",  "第" + self.id_value + "条数据已被删除，但签名失败！")
+                    QMessageBox.warning(self, "签名失败",  "第" + self.id_value + "条数据已被修改，但签名失败！")
             else:
                 QMessageBox.warning(self, "修改失败", "数据修改失败！")
 
